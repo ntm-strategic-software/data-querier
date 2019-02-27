@@ -1,4 +1,4 @@
-import React, { useState, createContext } from 'react';
+import React, { useState } from 'react';
 import propTypes from 'prop-types';
 
 // todo: change columnWidths to columnInfo and have the value be an object { width: number, position: number }
@@ -38,10 +38,10 @@ const JsonAsTable = ({ jsonData, columnWidths, tableHeight }) => {
             };
 
             const sortIcon = cellValue === sortCol ? (sortOrder === 1 ? <i className="fa fa-caret-up" /> : <i className="fa fa-caret-down" />) : '';
-            return <span key={`${colNum} ${cellValue}`} style={style} data-header={colHeaderText} onClick={onClick}>{cellValue} {sortIcon}</span>
+            return <span key={`${colNum} ${cellValue}`} style={style} data-header={colHeaderText} onClick={onClick}>{cellValue} {sortIcon}</span>;
         };
 
-        return <div key={JSON.stringify(data)} className={`row ml-2 ${classes}`}>{Object.entries(data).map((c, i) => dataCell(c, i))}</div>
+        return <div key={JSON.stringify(data)} className={`row ml-2 ${classes}`}>{Object.entries(data).map((c, i) => dataCell(c, i))}</div>;
     };
 
     const header = () => {
@@ -51,7 +51,7 @@ const JsonAsTable = ({ jsonData, columnWidths, tableHeight }) => {
             .reduce((obj, d) => {
                 const newKeys = Object
                     .keys(d)
-                    .reduce((newObj, k) => { return { ...newObj, [k]: k }}, {});
+                    .reduce((newObj, k) => { return { ...newObj, [k]: k }; }, {});
                 return { ...obj, ...newKeys };
             }, {});
 
