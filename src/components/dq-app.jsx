@@ -21,6 +21,8 @@ const useWindowHeight = () => {
     return winHeight;
 };
 
+const defaultSplitWidth = 250;
+
 const DqApp = ({ Localize }) => {
     const winHeight = useWindowHeight();
 
@@ -36,6 +38,10 @@ const DqApp = ({ Localize }) => {
         dataByOS: [],
         dataByLocale: [],
     });
+
+    const [locationSplitSize, setLocationSplitSize] = useState(defaultSplitWidth);
+    const [orgSplitSize, setOrgSplitSize] = useState(defaultSplitWidth);
+    const [osSplitSize, setOsSplitSize] = useState(defaultSplitWidth);
 
     const { dataSource, data, products, selectedProduct, dataSummary, dataByOrganization, dataByLocation, dataByOS, dataByLocale} = source;
 
@@ -78,6 +84,16 @@ const DqApp = ({ Localize }) => {
             return myArray;
         };
 
+        const getOS = osData => {
+            if (osData.includes('Windows')) return 'Windows';
+            if (osData.includes('Darwin')) return 'Mac';
+            if (/.*Linux.*Ubuntu.*/.test(osData)) return 'Ubuntu';
+            if (/.*Linux.*SMP PREEMPT.*/.test(osData)) return 'openSUSE';
+            if (/.*Linux.*fc.*/.test(osData)) return 'Fedora';
+            if (osData.includes('Linux')) return 'Linux';
+            return osData;
+        };
+
         // create the json's to display
         for (let i = 0; i < allData.length; ++i) {
             const reg = allData[i];
@@ -95,7 +111,7 @@ const DqApp = ({ Localize }) => {
             uniqueEmails = _.union(uniqueEmails, [reg.email]);    // build list of unique emails
             uniqueOrgs = updateUniqueCount(uniqueOrgs, 'Organization', reg.organization);
             uniqueLocations = updateUniqueCount(uniqueLocations, 'Country', reg.location);
-            uniqueOSs = updateUniqueCount(uniqueOSs, 'OS', reg.operatingSystem);
+            uniqueOSs = updateUniqueCount(uniqueOSs, 'OS', getOS(reg.operatingSystem));
             uniqueLocales = updateUniqueCount(uniqueLocales, 'Language', reg.locale);
         }
 
@@ -173,7 +189,7 @@ const DqApp = ({ Localize }) => {
 
         const topSplitHeight = 100;
         const tableHeight = winHeight - topSplitHeight - 28;
-        const defaultSplitWidth = 250;
+        const minSplitSize = 200;
 
         return (
             <div className="container-fluid p-0">
@@ -183,31 +199,31 @@ const DqApp = ({ Localize }) => {
                         <ObjInLine obj={dataSummary} />
                     </div>
                     <div className="mx-2">
-                        <SplitPane split="vertical" defaultSize={defaultSplitWidth}>
+                        <SplitPane split="vertical" defaultSize={defaultSplitWidth} minSize={minSplitSize} onChange={newSize => setLocationSplitSize(newSize)}>
                             <div>
                                 <JsonAsTable jsonData={dataByLocation}
                                              columnWidths={{
-                                                 Country: 140,
+                                                 Country: locationSplitSize - 110, //140,
                                                  //count: 20,
                                              }}
                                              tableHeight={`${tableHeight}px`} />
                             </div>
-                            <SplitPane split="vertical" defaultSize={defaultSplitWidth}>
+                            <SplitPane split="vertical" defaultSize={defaultSplitWidth} minSize={minSplitSize} onChange={newSize => setOrgSplitSize(newSize)}>
                                 <div>
                                     <JsonAsTable
                                         jsonData={dataByOrganization}
                                         columnWidths={{
-                                            Organization: 140,
+                                            Organization: orgSplitSize - 110,   // 140,
                                             //count: 20,
                                         }}
                                         tableHeight={`${tableHeight}px`}
                                     />
                                 </div>
-                                <SplitPane split="vertical" defaultSize={defaultSplitWidth}>
+                                <SplitPane split="vertical" defaultSize={defaultSplitWidth} minSize={minSplitSize} onChange={newSize => setOsSplitSize(newSize)}>
                                     <div>
                                         <JsonAsTable jsonData={dataByOS}
                                                      columnWidths={{
-                                                         OS: 140,
+                                                         OS: osSplitSize - 110, // 140,
                                                          //count: 20,
                                                      }}
                                                      tableHeight={`${tableHeight}px`} />

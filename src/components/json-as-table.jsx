@@ -58,11 +58,18 @@ const JsonAsTable = ({ jsonData, columnWidths, tableHeight }) => {
         return dataRow(headerData, 'font-weight-bold', headerClick);
     };
 
+    const rows = () => {
+        return sortedJson.map((d, i) => {
+            const classes = i % 2 === 1 ? 'bg-light' : '';
+            return dataRow(d, classes);
+        });
+    };
+
     return (
         <div className="container-fluid p-0">
             {header()}
             <div style={styles.scrollable}>
-                {sortedJson.map(d => dataRow(d))}
+                {rows()}
             </div>
         </div>
     );
