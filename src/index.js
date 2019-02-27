@@ -20,7 +20,7 @@ app.on('ready', async () => {
         // ***************************
         const appWindow = new BrowserWindow({
             show: false,
-            width: 1000,
+            width: 1010,
             height: 700,
             minWidth: 500,
             minHeight: 300,

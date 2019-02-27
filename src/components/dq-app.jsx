@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import { remote } from 'electron';
 import _ from 'lodash';
@@ -8,7 +8,22 @@ import SplitPane from 'react-split-pane';
 import JsonAsTable from './json-as-table';
 import ObjInLine from './obj-in-line';
 
+// React Hook to respond to window height changes
+const useWindowHeight = () => {
+    const [winHeight, setWinHeight] = useState(window.innerHeight);
+
+    useEffect(() => {
+        const handleResize = () => setWinHeight(window.innerHeight);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    });
+
+    return winHeight;
+};
+
 const DqApp = ({ Localize }) => {
+    const winHeight = useWindowHeight();
+
     // These all need to be updated at the same time, so put them into a single useState.
     const [source, setSource] = useState({
         dataSource: '',
@@ -156,12 +171,13 @@ const DqApp = ({ Localize }) => {
                 </div>
             </div>);
 
-        const tableHeight = 400;
+        const topSplitHeight = 100;
+        const tableHeight = winHeight - topSplitHeight - 28;
         const defaultSplitWidth = 250;
 
         return (
             <div className="container-fluid p-0">
-                <SplitPane split="horizontal" defaultSize={100} minSize={100} maxSize={100}>
+                <SplitPane split="horizontal" defaultSize={topSplitHeight} minSize={topSplitHeight} maxSize={topSplitHeight}>
                     <div className="mx-2">
                         {ProductSelectors()}
                         <ObjInLine obj={dataSummary} />
@@ -169,37 +185,37 @@ const DqApp = ({ Localize }) => {
                     <div className="mx-2">
                         <SplitPane split="vertical" defaultSize={defaultSplitWidth}>
                             <div>
-                                <JsonAsTable
-                                    jsonData={dataByOrganization}
-                                    columnWidths={{
-                                        Organization: 150,
-                                        //count: 20,
-                                    }}
-                                    tableHeight={`${tableHeight}px`}
-                                />
+                                <JsonAsTable jsonData={dataByLocation}
+                                             columnWidths={{
+                                                 Country: 140,
+                                                 //count: 20,
+                                             }}
+                                             tableHeight={`${tableHeight}px`} />
                             </div>
                             <SplitPane split="vertical" defaultSize={defaultSplitWidth}>
                                 <div>
-                                    <JsonAsTable jsonData={dataByLocale}
-                                                 columnWidths={{
-                                                     Language: 150,
-                                                     //count: 20,
-                                                 }}
-                                                 tableHeight={`${tableHeight}px`} />
+                                    <JsonAsTable
+                                        jsonData={dataByOrganization}
+                                        columnWidths={{
+                                            Organization: 140,
+                                            //count: 20,
+                                        }}
+                                        tableHeight={`${tableHeight}px`}
+                                    />
                                 </div>
                                 <SplitPane split="vertical" defaultSize={defaultSplitWidth}>
                                     <div>
-                                        <JsonAsTable jsonData={dataByLocation}
+                                        <JsonAsTable jsonData={dataByOS}
                                                      columnWidths={{
-                                                         Country: 150,
+                                                         OS: 140,
                                                          //count: 20,
                                                      }}
                                                      tableHeight={`${tableHeight}px`} />
                                     </div>
                                     <div>
-                                        <JsonAsTable jsonData={dataByOS}
+                                        <JsonAsTable jsonData={dataByLocale}
                                                      columnWidths={{
-                                                         OS: 150,
+                                                         Language: 140,
                                                          //count: 20,
                                                      }}
                                                      tableHeight={`${tableHeight}px`} />
