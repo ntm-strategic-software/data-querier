@@ -1,0 +1,15 @@
+{
+	"locale": "en-US",
+	"SelectADataSource": {
+		"DqApp": {
+			"val": "Select a data source",
+			"notes": ""
+		}
+	},
+	"DataQuerier": {
+		"DqApp": {
+			"val": "Data Querier",
+			"notes": ""
+		}
+	}
+}
