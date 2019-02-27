@@ -1,3 +1,7 @@
+# My stuff
+.idea/
+build/
+
 # Logs
 logs
 *.log

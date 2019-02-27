@@ -1,0 +1,94 @@
+{
+  "name": "data-querier",
+  "version": "0.0.1",
+  "main": "index.js",
+  "build": {
+    "electronVersion": "4.0.4",
+    "appId": "com.fmosoft.data-querier",
+    "productName": "Data Querier",
+    "copyright": "Copyright © 2019 by fmosoft",
+    "directories": {
+      "app": "build",
+      "output": "build-native"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "icon": "public/images/data_querier.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.other",
+      "icon": "public/images/data_querier.icns"
+    },
+    "linux": {
+      "target": "deb",
+      "icon": "./public/images/linux-icons/",
+      "synopsis": "Data Querier - Copyright 2019 by fmosoft.",
+      "description": "Data Querier - Copyright 2019 by fmosoft.",
+      "category": "Other",
+      "desktop": {
+        "Name": "Data Querier"
+      }
+    }
+  },
+  "browserslist": [
+    "Electron 4.0"
+  ],
+  "scripts": {
+    "start": "cd build && electron .",
+    "start-debug-main": "cd build && electron --inspect-brk=5858 .",
+    "build": "npm run scss && node doBuild.js && cd build && yarn install --production && cd .. && babel src --out-dir build",
+    "build-with-css": "npm run scss && node doBuild.js && cd build && yarn install --production && cd .. && babel src --out-dir build",
+    "copy": "node copy.js",
+    "watch": "babel src --watch --out-dir build",
+    "build-native": "electron-builder --dir",
+    "pack-native": "electron-builder",
+    "complete-build": "yarn install && node empty-build-folders.js && npm run doBuild && npm run pack-native",
+    "scss": "npm run css-compile && npm run css-prefix && npm run css-minify",
+    "css-compile": "node-sass --output-style expanded --source-map true --source-map-contents true --precision 6 scss/main.scss public/css/main.css",
+    "css-prefix": "postcss --config postcss/config.js --replace \"public/css/main.css\"",
+    "css-minify": "cleancss --level 1 --source-map --source-map-inline-sources --output public/css/main.min.css public/css/main.css",
+    "watch-scss": "nodemon -w scss -e scss -x \"npm run scss\""
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "eslint-plugin-react-hooks": "^1.3.0",
+    "fs-extra": "^7.0.1",
+    "lodash": "^4.17.11",
+    "os-locale": "^3.1.0",
+    "prop-types": "^15.7.1",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "react-split-pane": "^0.1.85",
+    "react-virtualized": "^9.21.0",
+    "rmrf-promise": "^1.1.0",
+    "sweetalert2": "^8.0.6",
+    "teeny-conf": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "clean-css-cli": "^4.2.1",
+    "electron": "^4.0.5",
+    "electron-builder": "^20.38.5",
+    "eslint": "^5.14.1",
+    "eslint-plugin-react": "^7.12.4",
+    "font-awesome": "^4.7.0",
+    "less-plugin-autoprefix": "^2.0.0",
+    "less-plugin-clean-css": "^1.5.1",
+    "node-sass": "^4.11.0",
+    "nodemon": "^1.18.10",
+    "postcss-cli": "^6.1.2"
+  }
+}
