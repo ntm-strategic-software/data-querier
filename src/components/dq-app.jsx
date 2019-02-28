@@ -45,6 +45,8 @@ const DqApp = ({ Localize }) => {
 
     const { dataSource, data, products, selectedProduct, dataSummary, dataByOrganization, dataByLocation, dataByOS, dataByLocale} = source;
 
+    useEffect(() => remote.getCurrentWindow().setTitle(`${Localize.text('DataQuerier', 'DqApp')} - ${dataSource}`), [dataSource]);
+
     const computeData = ({ newDataSource, productSelected }) => {
         const allData = newDataSource ? fs.readJsonSync(newDataSource) : data;
         const validData = [];
