@@ -1,6 +1,7 @@
 # My stuff
 .idea/
 build/
+build-native/
 
 # Logs
 logs
@@ -63,3 +64,5 @@ typings/
 
 # next.js build output
 .next
+
+package-lock.json
